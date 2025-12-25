@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | PulseBuy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0056E0;
+            --secondary-blue: #1A75FF;
+            --accent-yellow: #FFC107;
+            --accent-green: #00C853;
+            --accent-red: #FF3D00;
+            --background: #F9FAFB;
+            --white: #FFFFFF;
+            --border-color: #F1F5F9;
+            --dark-text: #1E293B;
+            --medium-text: #64748B;
+            --light-text: #94A3B8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header & Navigation --- */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo i {
+            color: var(--accent-yellow);
+            font-size: 24px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .user-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .user-link:hover {
+            background: #F8FAFC;
+            color: var(--primary-blue);
+        }
+
+        .user-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-group h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-group h1 i {
+            color: var(--accent-red);
+            font-size: 20px;
+        }
+
+        .wishlist-count {
+            color: var(--light-text);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        /* --- Product Grid --- */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .wishlist-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .wishlist-item:hover {
+            border-color: #E2E8F0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            padding-top: 100%;
+            background: #FBFBFC;
+            overflow: hidden;
+        }
+
+        .product-image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+
+        .badge-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge.sale { background: var(--accent-red); color: white; }
+        .badge.new { background: var(--primary-blue); color: white; }
+
+        .btn-remove-top {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.2s;
+            z-index: 2;
+        }
+
+        .btn-remove-top:hover {
+            background: #FFF1F2;
+            color: var(--accent-red);
+            border-color: #FECDD3;
+        }
+
+        .product-details {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-cat {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            height: 39px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            color: var(--accent-yellow);
+            font-size: 11px;
+        }
+
+        .rating-count {
+            font-size: 11px;
+            color: var(--light-text);
+        }
+
+        .price-container {
+            margin-top: auto;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .current-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .old-price {
+            font-size: 12px;
+            color: var(--light-text);
+            text-decoration: line-through;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--secondary-blue);
+        }
+
+        /* --- Empty State --- */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            max-width: 500px;
+            margin: 40px auto;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #CBD5E1;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--medium-text);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .btn-browse {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-browse:hover {
+            background: var(--secondary-blue);
+        }
+
+        /* --- Notifications --- */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: #0F172A;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            font-size: 13px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- Loading --- */
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px;
+            color: var(--medium-text);
+            font-size: 14px;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #E2E8F0;
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { padding: 0 16px; }
+            .user-link span { display: none; }
+            .main-content { padding: 24px 16px; }
+            .wishlist-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+            .current-price { font-size: 16px; }
+            .btn-add-cart span { display: none; }
+            .btn-add-cart::after { content: 'Add'; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-bolt"></i>
+                <span>PulseBuy</span>
+            </a>
+            <div class="user-actions">
+                <a href="products.html" class="user-link">
+                    <i class="fas fa-search"></i>
+                    <span>Shop</span>
+                </a>
+                <a href="cart.html" class="user-link" id="cartNav">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Bag (0)</span>
+                </a>
+                <a href="wishlist.html" class="user-link active">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                </a>
+                <div class="user-link">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="currentUser">User</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div class="title-group">
+                <h1><i class="fas fa-heart"></i> My Wishlist</h1>
+                <p class="wishlist-count" id="countDisplay">Personal Collection</p>
+            </div>
+        </div>
+        
+        <div id="wishlistContainer">
+            <div class="loading-screen">
+                <div class="spinner"></div>
+                <p>Loading collection...</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const Auth = {
+            getCurrentUser: () => {
+                try { return JSON.parse(localStorage.getItem('currentUser')) || { username: 'Guest' }; }
+                catch { return { username: 'Guest' }; }
+            }
+        };
+
+        let wishlist = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = Auth.getCurrentUser();
+            document.getElementById('currentUser').textContent = user.username;
+            updateCartNav();
+            loadWishlist();
+        });
+
+        function loadWishlist() {
+            setTimeout(() => {
+                wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                renderWishlist();
+            }, 300);
+        }
+
+        function renderWishlist() {
+            const container = document.getElementById('wishlistContainer');
+            const countDisplay = document.getElementById('countDisplay');
+            
+            if (wishlist.length === 0) {
+                countDisplay.textContent = "0 items";
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-heart"></i>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Save items you like to keep track of them and buy them later.</p>
+                        <a href="products.html" class="btn-browse">
+                            <i class="fas fa-shopping-bag"></i>
+                            Browse Products
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            countDisplay.textContent = `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'} saved`;
+            container.innerHTML = `
+                <div class="wishlist-grid">
+                    ${wishlist.map(item => createProductCard(item)).join('')}
+                </div>
+            `;
+        }
+
+        function createProductCard(item) {
+            const rating = (4.0 + Math.random() * 0.9).toFixed(1);
+            const reviews = Math.floor(Math.random() * 150) + 5;
+            const price = parseFloat(item.price || 0);
+            const oldPrice = (price * 1.15).toFixed(2);
+            const hasSale = Math.random() > 0.4;
+
+            return `
+                <div class="wishlist-item">
+                    <button class="btn-remove-top" onclick="removeFromWishlist('${item.id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="product-image-wrapper">
+                        <img src="${item.image || 'https://via.placeholder.com/240'}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/240?text=Image'">
+                        <div class="badge-container">
+                            ${hasSale ? '<span class="badge sale">Sale</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <span class="product-cat">${item.category || 'Collection'}</span>
+                        <h3 class="product-name">${item.name}</h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                ${Array(5).fill(0).map((_, i) => `<i class="${i < Math.floor(rating) ? 'fas' : 'far'} fa-star"></i>`).join('')}
+                            </div>
+                            <span class="rating-count">(${reviews})</span>
+                        </div>
+                        <div class="price-container">
+                            <span class="current-price">R${price.toFixed(2)}</span>
+                            <span class="old-price">R${oldPrice}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="moveToCart('${item.id}')">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Add to Bag</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function removeFromWishlist(id) {
+            wishlist = wishlist.filter(item => item.id !== id);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            showToast('Item removed', 'info');
+            renderWishlist();
+        }
+
+        function moveToCart(id) {
+            const item = wishlist.find(i => i.id === id);
+            if (!item) return;
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existing = cart.find(c => c.id === id);
+            if (existing) existing.quantity += 1;
+            else cart.push({ ...item, quantity: 1 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            wishlist = wishlist.filter(i => i.id !== id);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            showToast('Added to bag', 'success');
+            renderWishlist();
+            updateCartNav();
+        }
+
+        function updateCartNav() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
+            const cartNav = document.getElementById('cartNav');
+            if (cartNav) cartNav.innerHTML = `<i class="fas fa-shopping-bag"></i> <span>Bag (${count})</span>`;
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

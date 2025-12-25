@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseBuy - My Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0056E0;
+            --accent-yellow: #FFC107;
+            --secondary-blue: #1A75FF;
+            --dark-text: #22252A;
+            --medium-text: #525760;
+            --light-text: #7B7E85;
+            --lighter-text: #A5A8B0;
+            --background: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E9EF;
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --success: #00C853;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--accent-yellow);
+            margin-right: 8px;
+            font-size: 26px;
+        }
+
+        .logo span {
+            color: var(--accent-yellow);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px 12px 48px;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 17px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .user-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Main Navigation */
+        .main-nav {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 5%;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .main-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            padding: 15px 0;
+        }
+
+        .nav-link {
+            color: var(--dark-text);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            white-space: nowrap;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .nav-link.active:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-blue);
+            border-radius: 3px;
+        }
+
+        /* Promotional Banner */
+        .promo-banner {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 16px 5%;
+        }
+
+        .promo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-text .username {
+            font-weight: 700;
+            margin: 0 4px;
+        }
+
+        .promo-btn {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+        }
+
+        .promo-btn:hover {
+            background: #f5fff9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        /* Account Features */
+        .features-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 18px;
+        }
+
+        .feature-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: #e0e0e0;
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 86, 224, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 18px;
+        }
+
+        .feature-link {
+            color: var(--primary-blue);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .feature-main {
+            margin-top: 15px;
+        }
+
+        .feature-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 8px 0;
+        }
+
+        .feature-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--light-text);
+            line-height: 1.5;
+            margin-top: 5px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-title-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 86, 224, 0.12);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 20px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link {
+            color: var(--medium-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(0, 86, 224, 0.08);
+            color: var(--primary-blue);
+        }
+
+        .sidebar-icon {
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* Order History */
+        .order-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-label {
+            font-size: 15px;
+            color: var(--light-text);
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            font-size: 15px;
+            min-width: 150px;
+        }
+
+        .filter-text {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-left: 15px;
+        }
+
+        .order-list {
+            margin-top: 15px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            margin-bottom: 12px;
+            border: 1px solid #f0f0f0;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .order-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+            border-color: #ddd;
+        }
+
+        .order-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .order-date {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--medium-text);
+            min-width: 100px;
+        }
+
+        .order-product {
+            font-size: 16px;
+            font-weight: 500;
+            max-width: 500px;
+        }
+
+        .order-status {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 15px;
+            margin-left: 15px;
+        }
+
+        .status-delivered {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+        }
+
+        .status-processing {
+            background: rgba(255, 152, 0, 0.15);
+            color: var(--warning);
+        }
+
+        .status-cancelled {
+            background: rgba(244, 67, 54, 0.15);
+            color: var(--danger);
+        }
+
+        .order-price {
+            font-weight: 700;
+            color: var(--dark-text);
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .order-action {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-action:hover {
+            background: #0048b8;
+        }
+
+        /* Invoice Section */
+        .invoice-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .invoice-content {
+            margin-top: 15px;
+        }
+
+        .invoice-desc {
+            font-size: 15px;
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .invoice-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .invoice-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 13px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .invoice-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .invoice-btn:hover {
+            background: #0048b8;
+        }
+
+        /* No Orders Message */
+        .no-orders {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--medium-text);
+        }
+
+        .no-orders-icon {
+            font-size: 48px;
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                margin-bottom: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin: 15px 0 0;
+            }
+
+            .user-actions {
+                margin-left: auto;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .order-actions {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-link span {
+                display: none;
+            }
+
+            .nav-btn {
+                padding: 8px;
+            }
+
+            .promo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .promo-btn {
+                width: 100%;
+            }
+
+            .invoice-form {
+                flex-direction: column;
+            }
+
+            .invoice-input, .invoice-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="logo-area">
+            <a href="index.html" class="logo">
+                <i class="fas fa-bolt"></i> Pulse<span>Buy</span>
+            </a>
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" placeholder="Search for products, brands and categories">
+        </div>
+
+        <div class="user-actions">
+            <a href="#" class="user-link">
+                <i class="fas fa-headset"></i>
+                <span>customer service center</span>
+            </a>
+            <a href="#" class="user-link">
+                <i class="fas fa-globe"></i>
+                <span>Global</span>
+            </a>
+            <a href="#" class="user-link">
+                <i class="fas fa-user"></i>
+                <span id="username">Buyer123</span>
+            </a>
+            <a href="logout.html" class="nav-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>log out</span>
+            </a>
+        </div>
+    </nav>
+
+
+    <main class="dashboard-container">
+
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-title-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>My PulseBuy</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active">
+                        <span class="sidebar-icon"><i class="fas fa-home"></i></span>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon"><i class="fas fa-file-alt"></i></span>
+                        <span>Order Details</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon"><i class="fas fa-redo"></i></span>
+                        <span>Frequently Purchased</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon"><i class="fas fa-plane"></i></span>
+                        <span>Travel/Hotel</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon"><i class="fas fa-ticket-alt"></i></span>
+                        <span>Club Stamp</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon"><i class="fas fa-credit-card"></i></span>
+                        <span>Pulse Card</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div>
+
+            <div class="features-section">
+                <h2 class="section-title">
+                    <i class="fas fa-wallet"></i> Account Summary
+                </h2>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <a href="#" class="feature-link">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="feature-main">
+                            <div class="feature-amount" id="totalOrders">15</div>
+                            <h3 class="feature-title">Total Orders</h3>
+                            <p class="feature-desc">Orders placed with PulseBuy</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <a href="#" class="feature-link">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="feature-main">
+                            <div class="feature-amount" id="totalSpent">R12,345.67</div>
+                            <h3 class="feature-title">Total Spent</h3>
+                            <p class="feature-desc">Cumulative order value</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <a href="#" class="feature-link">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="feature-main">
+                            <div class="feature-amount" id="uniqueProducts">28</div>
+                            <h3 class="feature-title">Unique Products</h3>
+                            <p class="feature-desc">Different products purchased</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <a href="#" class="feature-link">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="feature-main">
+                            <div class="feature-amount" id="discountCoupons">3</div>
+                            <h3 class="feature-title">Discount Coupons</h3>
+                            <p class="feature-desc">Available discount offers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="order-section">
+                <div class="order-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i> Recent Order History
+                    </h2>
+
+                    <div class="filter-group">
+                        <span class="filter-label">for the past month</span>
+                        <select class="filter-select" id="orderFilter">
+                            <option value="all">All Orders</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="processing">Processing</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <span class="filter-text">up to (5 years)</span>
+                    </div>
+                </div>
+
+                <div class="order-list" id="orderList">
+
+                </div>
+            </div>
+
+
+            <div class="invoice-section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-invoice"></i> Receipt/Invoice Inquiry
+                </h2>
+
+                <div class="invoice-content">
+                    <p class="invoice-desc">Enter the order ID or product information to view detailed receipts and invoices.</p>
+
+                    <form action="#" class="invoice-form" id="invoiceForm">
+                        <input type="text" class="invoice-input" name="search" placeholder="Enter order ID or product name...">
+                        <button type="submit" class="invoice-btn">
+                            <i class="fas fa-search"></i> View Invoice
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample data for the dashboard
+        const dashboardData = {
+            username: "Buyer123",
+            totalOrders: 15,
+            totalSpent: 12345.67,
+            uniqueProducts: 28,
+            discountCoupons: 3,
+            recentOrders: [
+                {
+                    id: 1,
+                    date: "2024-03-15",
+                    productName: "Smartphone X Pro 256GB",
+                    status: "delivered",
+                    price: 8999.99,
+                    itemCount: 1
+                },
+                {
+                    id: 2,
+                    date: "2024-03-10",
+                    productName: "Wireless Noise-Canceling Headphones",
+                    status: "processing",
+                    price: 1499.99,
+                    itemCount: 1
+                },
+                {
+                    id: 3,
+                    date: "2024-03-05",
+                    productName: "Premium Cotton T-Shirt Pack (3 items)",
+                    status: "delivered",
+                    price: 299.99,
+                    itemCount: 3
+                },
+                {
+                    id: 4,
+                    date: "2024-02-28",
+                    productName: "Automatic Drip Coffee Maker",
+                    status: "cancelled",
+                    price: 599.99,
+                    itemCount: 1
+                },
+                {
+                    id: 5,
+                    date: "2024-02-20",
+                    productName: "Laptop Backpack + Wireless Mouse",
+                    status: "delivered",
+                    price: 849.50,
+                    itemCount: 2
+                }
+            ]
+        };
+
+        // Utility functions
+        function formatCurrency(amount) {
+            return 'R' + parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'delivered': return 'status-delivered';
+                case 'processing': return 'status-processing';
+                case 'cancelled': return 'status-cancelled';
+                default: return '';
+            }
+        }
+
+        function getStatusText(status) {
+            return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = dashboardData.username;
+
+            // Update username in header
+            const usernameElement = document.getElementById('username');
+            if (usernameElement) {
+                usernameElement.textContent = username;
+            }
+
+            // Update account summary
+            document.getElementById('totalOrders').textContent = dashboardData.totalOrders;
+            document.getElementById('totalSpent').textContent = formatCurrency(dashboardData.totalSpent);
+            document.getElementById('uniqueProducts').textContent = dashboardData.uniqueProducts;
+            document.getElementById('discountCoupons').textContent = dashboardData.discountCoupons;
+
+            // Render orders
+            renderOrders(dashboardData.recentOrders);
+
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Render orders to the page
+        function renderOrders(orders) {
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = '';
+
+            if (orders.length === 0) {
+                orderList.innerHTML = `
+                    <div class="no-orders">
+                        <div class="no-orders-icon">
+                            <i class="fas fa-shopping-basket"></i>
+                        </div>
+                        <h3>No Orders Found</h3>
+                        <p>You haven't placed any orders yet. Start shopping to see them here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            orders.forEach(order => {
+                const statusClass = getStatusClass(order.status);
+                const statusText = getStatusText(order.status);
+                const formattedPrice = formatCurrency(order.price);
+
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.setAttribute('data-status', order.status);
+                orderItem.innerHTML = `
+                    <div class="order-info">
+                        <div class="order-date">${order.date}</div>
+                        <div class="order-product">
+                            ${order.productName}
+                            ${order.itemCount > 1 ? ` and ${order.itemCount - 1} more` : ''}
+                        </div>
+                        <div class="order-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="order-price">${formattedPrice}</div>
+                    <button class="order-action" data-order-id="${order.id}">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                `;
+
+                orderList.appendChild(orderItem);
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Order filtering
+            const orderFilter = document.getElementById('orderFilter');
+            if (orderFilter) {
+                orderFilter.addEventListener('change', function() {
+                    const filterValue = this.value;
+                    const orderItems = document.querySelectorAll('.order-item');
+
+                    orderItems.forEach(item => {
+                        if (filterValue === 'all' || item.getAttribute('data-status') === filterValue) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Show no orders message if all are filtered out
+                    const visibleItems = Array.from(orderItems).filter(item =>
+                        item.style.display !== 'none');
+
+                    const orderList = document.getElementById('orderList');
+                    if (visibleItems.length === 0) {
+                        if (!document.querySelector('.no-orders')) {
+                            const noOrders = document.createElement('div');
+                            noOrders.className = 'no-orders';
+                            noOrders.innerHTML = `
+                                <div class="no-orders-icon">
+                                    <i class="fas fa-shopping-basket"></i>
+                                </div>
+                                <h3>No Orders Found</h3>
+                                <p>No orders match the selected filter.</p>
+                            `;
+                            orderList.appendChild(noOrders);
+                        }
+                    } else {
+                        const noOrdersMsg = document.querySelector('.no-orders');
+                        if (noOrdersMsg) noOrdersMsg.remove();
+                    }
+                });
+            }
+
+            // Order view functionality
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.order-action')) {
+                    const button = e.target.closest('.order-action');
+                    const orderId = button.getAttribute('data-order-id');
+                    alert(`Opening order details for order #${orderId}`);
+                    // In a real application, you would redirect to order details page
+                    // window.location.href = `order_details.html?id=${orderId}`;
+                }
+            });
+
+            // Feature card interactions
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('.feature-title').textContent;
+                    alert(`Opening details for: ${title}`);
+                });
+            });
+
+            // Search functionality
+            const searchBar = document.querySelector('.search-bar');
+            if (searchBar) {
+                searchBar.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        alert(`Searching for: ${searchBar.value}`);
+                        // In a real application, you would redirect to search results page
+                        // window.location.href = `search.html?q=${encodeURIComponent(searchBar.value)}`;
+                    }
+                });
+            }
+
+            // Invoice form submission
+            const invoiceForm = document.getElementById('invoiceForm');
+            if (invoiceForm) {
+                invoiceForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const searchInput = this.querySelector('.invoice-input');
+                    alert(`Searching for invoice: ${searchInput.value}`);
+                    // In a real application, you would process the form
+                });
+            }
+
+            // Logout button
+            const logoutBtn = document.querySelector('.nav-btn[href*="logout"]');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        alert('Logging out...');
+                        // In a real application, you would redirect to logout page
+                        window.location.href = 'loginSignup.html';
+                    }
+                });
+            }
+
+            // Sidebar navigation
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const menuText = this.querySelector('span:last-child').textContent;
+                    alert(`Navigating to: ${menuText}`);
+                });
+            });
+
+            // Feature links
+            const featureLinks = document.querySelectorAll('.feature-link');
+            featureLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering the parent card click
+                    e.preventDefault();
+                    alert('Opening details page...');
+                });
+            });
+        }
+    </script>
+</body>
+</html>

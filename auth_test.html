@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseBuy - Authentication System Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .test-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .test-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .test-content {
+            padding: 40px;
+        }
+
+        .test-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .test-results {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .pass .summary-number {
+            color: #38a169;
+        }
+
+        .fail .summary-number {
+            color: #e53e3e;
+        }
+
+        .total .summary-number {
+            color: #3182ce;
+        }
+
+        .test-details {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .test-item.pass {
+            background: #f0fff4;
+        }
+
+        .test-item.fail {
+            background: #fffafa;
+        }
+
+        .test-icon {
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .test-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .test-message {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .demo-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .demo-credentials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .credential-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .credential-role {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .credential-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .console-output {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1 class="test-title">🧪 Authentication Test Suite</h1>
+            <p class="test-subtitle">PulseBuy Demo - Authentication System Validation</p>
+        </div>
+
+        <div class="test-content">
+            <div class="demo-section">
+                <h2 class="demo-title">🔑 Demo Credentials</h2>
+                <div class="demo-credentials">
+                    <div class="credential-card">
+                        <div class="credential-role">🛒 Buyer</div>
+                        <div class="credential-details">
+                            <div>Email: buyer@example.com</div>
+                            <div>Username: buyer123</div>
+                            <div>Password: buyer123</div>
+                        </div>
+                    </div>
+                    <div class="credential-card">
+                        <div class="credential-role">🏪 Seller</div>
+                        <div class="credential-details">
+                            <div>Email: seller@example.com</div>
+                            <div>Username: seller123</div>
+                            <div>Password: seller123</div>
+                        </div>
+                    </div>
+                    <div class="credential-card">
+                        <div class="credential-role">👑 Admin</div>
+                        <div class="credential-details">
+                            <div>Email: admin@example.com</div>
+                            <div>Username: admin123</div>
+                            <div>Password: admin123</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h2 class="section-title">Test Controls</h2>
+                <div class="test-controls">
+                    <button class="btn btn-primary" onclick="runAllTests()">
+                        <span>🚀</span> Run All Tests
+                    </button>
+                    <button class="btn btn-secondary" onclick="testLoginFlow()">
+                        <span>🔐</span> Test Login Flow
+                    </button>
+                    <button class="btn btn-secondary" onclick="testSessionManagement()">
+                        <span>💾</span> Test Session Management
+                    </button>
+                    <a href="loginSignup.html" class="btn btn-secondary">
+                        <span>🌐</span> Open Login Page
+                    </a>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h2 class="section-title">Test Results</h2>
+                <div class="test-results">
+                    <div class="results-header">
+                        <div class="results-summary">
+                            <div class="summary-card total">
+                                <div class="summary-number" id="totalTests">0</div>
+                                <div class="summary-label">Total Tests</div>
+                            </div>
+                            <div class="summary-card pass">
+                                <div class="summary-number" id="passedTests">0</div>
+                                <div class="summary-label">Passed</div>
+                            </div>
+                            <div class="summary-card fail">
+                                <div class="summary-number" id="failedTests">0</div>
+                                <div class="summary-label">Failed</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-details" id="testDetails">
+                        <div style="padding: 40px; text-align: center; color: #718096;">
+                            <p>No tests run yet. Click "Run All Tests" to start testing the authentication system.</p>
+                        </div>
+                    </div>
+
+                    <div class="console-output" id="consoleOutput" style="display: none;">
+                        <h3 style="color: #63b3ed; margin-bottom: 15px;">Console Output:</h3>
+                        <div id="consoleLines"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="auth.js"></script>
+    <script src="test_auth.js"></script>
+    
+    <script>
+        let testResults = {
+            tests: [],
+            passed: 0,
+            failed: 0
+        };
+
+        function updateResultsDisplay() {
+            document.getElementById('totalTests').textContent = testResults.tests.length;
+            document.getElementById('passedTests').textContent = testResults.passed;
+            document.getElementById('failedTests').textContent = testResults.failed;
+
+            const testDetails = document.getElementById('testDetails');
+            
+            if (testResults.tests.length === 0) {
+                testDetails.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #718096;">
+                        <p>No tests run yet. Click "Run All Tests" to start testing the authentication system.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            testDetails.innerHTML = testResults.tests.map(test => `
+                <div class="test-item ${test.result ? 'pass' : 'fail'}">
+                    <div class="test-icon">${test.result ? '✅' : '❌'}</div>
+                    <div class="test-name">${test.name}</div>
+                    <div class="test-message">${test.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function addTestResult(testName, result, message) {
+            testResults.tests.push({
+                name: testName,
+                result: result,
+                message: message,
+                timestamp: new Date().toISOString()
+            });
+            
+            if (result) {
+                testResults.passed++;
+            } else {
+                testResults.failed++;
+            }
+
+            // Update console output
+            const consoleOutput = document.getElementById('consoleOutput');
+            const consoleLines = document.getElementById('consoleLines');
+            
+            if (consoleOutput.style.display === 'none') {
+                consoleOutput.style.display = 'block';
+            }
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const icon = result ? '✅' : '❌';
+            consoleLines.innerHTML += `<div class="console-line">[${timestamp}] ${icon} ${testName}: ${message}</div>`;
+            consoleLines.scrollTop = consoleLines.scrollHeight;
+
+            // Update results display
+            updateResultsDisplay();
+        }
+
+        function clearResults() {
+            testResults = { tests: [], passed: 0, failed: 0 };
+            document.getElementById('testDetails').innerHTML = `
+                <div style="padding: 40px; text-align: center; color: #718096;">
+                    <p>Tests cleared. Click "Run All Tests" to start testing the authentication system.</p>
+                </div>
+            `;
+            document.getElementById('consoleOutput').style.display = 'none';
+            document.getElementById('consoleLines').innerHTML = '';
+            updateResultsDisplay();
+        }
+
+        // Override console methods to capture output
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn
+        };
+
+        console.log = function(...args) {
+            originalConsole.log.apply(console, args);
+            const message = args.join(' ');
+            const consoleOutput = document.getElementById('consoleOutput');
+            const consoleLines = document.getElementById('consoleLines');
+            
+            if (consoleOutput.style.display === 'none') {
+                consoleOutput.style.display = 'block';
+            }
+            
+            const timestamp = new Date().toLocaleTimeString();
+            consoleLines.innerHTML += `<div class="console-line" style="color: #68d391;">[${timestamp}] ℹ️ ${message}</div>`;
+            consoleLines.scrollTop = consoleLines.scrollHeight;
+        };
+
+        console.error = function(...args) {
+            originalConsole.error.apply(console, args);
+            const message = args.join(' ');
+            const consoleOutput = document.getElementById('consoleOutput');
+            const consoleLines = document.getElementById('consoleLines');
+            
+            if (consoleOutput.style.display === 'none') {
+                consoleOutput.style.display = 'block';
+            }
+            
+            const timestamp = new Date().toLocaleTimeString();
+            consoleLines.innerHTML += `<div class="console-line" style="color: #fc8181;">[${timestamp}] ❌ ${message}</div>`;
+            consoleLines.scrollTop = consoleLines.scrollHeight;
+        };
+
+        // Test functions
+        function runAllTests() {
+            clearResults();
+            
+            // Check if Auth is loaded
+            if (typeof Auth === 'undefined') {
+                addTestResult('Auth Module Load', false, 'Auth object not found - auth.js may not be loaded');
+                updateResultsDisplay();
+                return;
+            }
+
+            addTestResult('Test Started', true, 'Authentication system test initiated');
+
+            // Run the actual tests from test_auth.js
+            try {
+                testAuthModule();
+                testLoginFunctionality();
+                testSignupFunctionality();
+                testSessionManagement();
+                addTestResult('Test Completed', true, 'All authentication tests executed');
+            } catch (error) {
+                addTestResult('Test Execution Error', false, `Error during test execution: ${error.message}`);
+            }
+
+            updateResultsDisplay();
+        }
+
+        function testLoginFlow() {
+            clearResults();
+            
+            if (typeof Auth === 'undefined') {
+                addTestResult('Auth Module Load', false, 'Auth object not found');
+                return;
+            }
+
+            // Test all demo user logins
+            const demoUsers = [
+                { email: 'buyer@example.com', username: 'buyer123', password: 'buyer123', role: 'buyer', name: 'Buyer' },
+                { email: 'seller@example.com', username: 'seller123', password: 'seller123', role: 'seller', name: 'Seller' },
+                { email: 'admin@example.com', username: 'admin123', password: 'admin123', role: 'admin', name: 'Admin' }
+            ];
+
+            demoUsers.forEach(user => {
+                const result = Auth.login(user.email, user.password);
+                if (result.success && result.role === user.role) {
+                    addTestResult(`${user.name} Login`, true, `Successfully logged in as ${user.role}`);
+                } else {
+                    addTestResult(`${user.name} Login`, false, `Login failed: ${JSON.stringify(result)}`);
+                }
+            });
+
+            updateResultsDisplay();
+        }
+
+        function testSessionManagement() {
+            clearResults();
+            
+            // Test storage functionality
+            const testData = { test: 'value', timestamp: Date.now() };
+            sessionStorage.setItem('pulsebuy_test', JSON.stringify(testData));
+            const retrieved = JSON.parse(sessionStorage.getItem('pulsebuy_test') || '{}');
+            
+            if (JSON.stringify(testData) === JSON.stringify(retrieved)) {
+                addTestResult('Session Storage', true, 'Data stored and retrieved correctly');
+            } else {
+                addTestResult('Session Storage', false, 'Session storage failed');
+            }
+
+            // Test localStorage
+            localStorage.setItem('pulsebuy_test_local', JSON.stringify(testData));
+            const localRetrieved = JSON.parse(localStorage.getItem('pulsebuy_test_local') || '{}');
+            
+            if (JSON.stringify(testData) === JSON.stringify(localRetrieved)) {
+                addTestResult('Local Storage', true, 'Local storage working correctly');
+            } else {
+                addTestResult('Local Storage', false, 'Local storage failed');
+            }
+
+            // Test Auth methods
+            if (typeof Auth.getCurrentUser === 'function') {
+                const currentUser = Auth.getCurrentUser();
+                if (currentUser && currentUser.id && currentUser.email && currentUser.role) {
+                    addTestResult('User Data Structure', true, 'User object has required fields');
+                } else {
+                    addTestResult('User Data Structure', false, 'User object missing required fields');
+                }
+            } else {
+                addTestResult('Auth Methods', false, 'Auth.getCurrentUser method not available');
+            }
+
+            updateResultsDisplay();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Authentication Test Suite loaded');
+            console.log('Click "Run All Tests" to start testing');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - PulseBuy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #0050b5;
+            --primary-orange: #ff6a00;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #495057;
+            --text-dark: #212529;
+            --white: #ffffff;
+            --sale-red: #e63946;
+            --accent-yellow: #ffd166;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .top-nav {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-yellow);
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .user-actions a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.2s;
+        }
+
+        .user-actions a:hover {
+            opacity: 0.8;
+        }
+
+        .main-nav {
+            background-color: var(--white);
+            padding: 15px 5%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-blue);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .cart-header h1 {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-stats {
+            display: flex;
+            gap: 20px;
+            color: var(--dark-gray);
+        }
+
+        .cart-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cart-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .cart-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cart-items {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .item-seller {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--medium-gray);
+            background: var(--white);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .quantity {
+            width: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--sale-red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .remove-btn:hover {
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        .cart-summary {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            align-self: flex-start;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .checkout-btn:hover {
+            background: #e05b00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.2);
+        }
+
+        .continue-shopping {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 4rem;
+            color: var(--medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+        }
+
+        .empty-cart p {
+            color: var(--dark-gray);
+            margin-bottom: 30px;
+        }
+
+        .promo-code {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .promo-code-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .promo-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .apply-btn {
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .apply-btn:hover {
+            background: #003d8a;
+        }
+
+        .cart-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .saved-later {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .saved-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .saved-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .saved-item:last-child {
+            border-bottom: none;
+        }
+
+        .saved-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .saved-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .saved-details {
+            flex: 1;
+        }
+
+        .saved-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-to-cart-btn {
+            padding: 8px 15px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .remove-saved-btn {
+            padding: 8px 15px;
+            background: none;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: var(--white);
+            padding: 40px 5% 20px;
+            border-top: 2px solid var(--primary-blue);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-blue);
+            margin-bottom: 18px;
+            font-size: 1.1rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-blue);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            display: block;
+            padding: 4px 0;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-blue);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cart-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .item-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .saved-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="logo-area">
+            <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <div class="logo"><i class="fas fa-bolt"></i> Pulse<span>Buy</span></div>
+                <div class="logo-subtitle">South Africa's #1 C2C Marketplace</div>
+            </a>
+        </div>
+
+        <div class="user-actions">
+            <a href="loginSignup.html"><i class="fas fa-user"></i> Sign In</a>
+            <a href="#register"><i class="fas fa-user-plus"></i> Join</a>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="products.html">Best Sellers</a>
+            <a href="products.html">New Arrivals</a>
+            <a href="products.html">Deals</a>
+            <a href="products.html">Categories</a>
+            <a href="index.html" class="active"><i class="fas fa-shopping-cart"></i> My Cart</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="cart-header">
+            <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+            <div class="cart-stats">
+                <span><i class="fas fa-box"></i> 3 items</span>
+                <span><i class="fas fa-rand-sign"></i> R10,798.97 total</span>
+            </div>
+        </div>
+
+        <div class="cart-content">
+            <div class="cart-items">
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="https://i.pinimg.com/736x/f2/42/a0/f242a096f258332ba96fa51f61360d39.jpg" alt="Smartphone X Pro">
+                    </div>
+                    <div class="item-details">
+                        <h3 class="item-title">Smartphone X Pro - 256GB</h3>
+                        <p class="item-seller">Sold by: TechGear SA</p>
+                        <div class="item-price">R8,999.99</div>
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" onclick="updateQuantity('item1', -1)">-</button>
+                                <span class="quantity" id="item1-qty">1</span>
+                                <button class="quantity-btn plus" onclick="updateQuantity('item1', 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem('item1')">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="https://i.pinimg.com/1200x/e9/05/c5/e905c536c865d8b9c93d184aef1e45ec.jpg" alt="Wireless Headphones">
+                    </div>
+                    <div class="item-details">
+                        <h3 class="item-title">Wireless Noise-Canceling Headphones</h3>
+                        <p class="item-seller">Sold by: AudioTech</p>
+                        <div class="item-price">R1,499.99</div>
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" onclick="updateQuantity('item2', -1)">-</button>
+                                <span class="quantity" id="item2-qty">1</span>
+                                <button class="quantity-btn plus" onclick="updateQuantity('item2', 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem('item2')">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="https://i.pinimg.com/1200x/d9/d9/87/d9d9873386239aac8983e0df1239fa2d.jpg" alt="Cotton T-Shirt">
+                    </div>
+                    <div class="item-details">
+                        <h3 class="item-title">Premium Cotton T-Shirt - 3 Pack</h3>
+                        <p class="item-seller">Sold by: FashionHub</p>
+                        <div class="item-price">R299.99</div>
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus" onclick="updateQuantity('item3', -1)">-</button>
+                                <span class="quantity" id="item3-qty">1</span>
+                                <button class="quantity-btn plus" onclick="updateQuantity('item3', 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem('item3')">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h3 class="summary-title">Order Summary</h3>
+
+                <div class="summary-row">
+                    <span>Subtotal (3 items)</span>
+                    <span id="subtotal">R10,798.97</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span id="shipping">R0.00</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Tax</span>
+                    <span id="tax">R1,511.86</span>
+                </div>
+
+                <div class="promo-code">
+                    <div class="promo-code-title">Promo Code</div>
+                    <div class="promo-input">
+                        <input type="text" placeholder="Enter code" id="promoCode">
+                        <button class="apply-btn" onclick="applyPromoCode()">Apply</button>
+                    </div>
+                </div>
+
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span id="total">R12,310.83</span>
+                </div>
+
+                <button class="checkout-btn" onclick="checkout()">
+                    <i class="fas fa-lock"></i> Proceed to Checkout
+                </button>
+
+                <a href="products.html" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+
+        <div class="saved-later">
+            <h3 class="saved-title"><i class="fas fa-heart"></i> Saved for Later (1 item)</h3>
+
+            <div class="saved-item">
+                <div class="saved-image">
+                    <img src="https://i.pinimg.com/1200x/ee/1c/03/ee1c0333c623e086b7f622ce967c8fed.jpg" alt="Coffee Maker">
+                </div>
+                <div class="saved-details">
+                    <h4>Automatic Drip Coffee Maker</h4>
+                    <p style="color: var(--dark-gray); font-size: 0.9rem;">Currently out of stock</p>
+                    <div class="item-price">R599.99</div>
+                </div>
+                <div class="saved-actions">
+                    <button class="add-to-cart-btn" onclick="moveToCart()">Move to Cart</button>
+                    <button class="remove-saved-btn" onclick="removeSaved()">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Customer Service</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Returns & Refunds</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>About PulseBuy</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Sell on PulseBuy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Account</h3>
+                <ul class="footer-links">
+                    <li><a href="loginSignup.html">Sign In</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="#">Order History</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Stay Connected</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2024 PulseBuy. All rights reserved. | South Africa's #1 C2C Marketplace
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Product data
+        const products = {
+            'item1': { price: 8999.99, name: 'Smartphone X Pro - 256GB' },
+            'item2': { price: 1499.99, name: 'Wireless Noise-Canceling Headphones' },
+            'item3': { price: 299.99, name: 'Premium Cotton T-Shirt - 3 Pack' }
+        };
+
+        // Update quantity
+        function updateQuantity(itemId, change) {
+            const qtyElement = document.getElementById(`${itemId}-qty`);
+            let qty = parseInt(qtyElement.textContent);
+            qty += change;
+
+            if (qty < 1) qty = 1;
+            if (qty > 10) qty = 10;
+
+            qtyElement.textContent = qty;
+            calculateTotal();
+        }
+
+        // Remove item
+        function removeItem(itemId) {
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                const itemElement = document.querySelector(`[onclick*="${itemId}"]`).closest('.cart-item');
+                itemElement.style.opacity = '0';
+                itemElement.style.transform = 'translateX(-20px)';
+
+                setTimeout(() => {
+                    itemElement.remove();
+                    calculateTotal();
+                    updateCartStats();
+                }, 300);
+            }
+        }
+
+        // Apply promo code
+        function applyPromoCode() {
+            const promoCode = document.getElementById('promoCode').value;
+            const message = document.getElementById('promoMessage') || document.createElement('div');
+            message.id = 'promoMessage';
+            message.style.marginTop = '10px';
+            message.style.padding = '8px';
+            message.style.borderRadius = '4px';
+            message.style.fontSize = '0.9rem';
+
+            if (promoCode.toUpperCase() === 'WELCOME10') {
+                message.textContent = '🎉 Promo code applied! 10% discount added.';
+                message.style.backgroundColor = '#d4edda';
+                message.style.color = '#155724';
+                calculateTotal(true);
+            } else if (promoCode.trim() === '') {
+                message.textContent = 'Please enter a promo code';
+                message.style.backgroundColor = '#fff3cd';
+                message.style.color = '#856404';
+            } else {
+                message.textContent = 'Invalid promo code';
+                message.style.backgroundColor = '#f8d7da';
+                message.style.color = '#721c24';
+            }
+
+            const promoContainer = document.querySelector('.promo-code');
+            if (!document.getElementById('promoMessage')) {
+                promoContainer.appendChild(message);
+            }
+        }
+
+        // Calculate total
+        function calculateTotal(hasDiscount = false) {
+            let subtotal = 0;
+            let itemsCount = 0;
+
+            // Calculate subtotal
+            Object.keys(products).forEach(itemId => {
+                const qtyElement = document.getElementById(`${itemId}-qty`);
+                if (qtyElement) {
+                    const qty = parseInt(qtyElement.textContent);
+                    subtotal += products[itemId].price * qty;
+                    itemsCount += qty;
+                }
+            });
+
+            // Calculate tax (15% VAT)
+            const tax = subtotal * 0.15;
+
+            // Calculate total
+            let total = subtotal + tax;
+
+            // Apply discount if applicable
+            if (hasDiscount) {
+                const discount = subtotal * 0.1;
+                total -= discount;
+
+                // Add discount row
+                const discountRow = document.querySelector('.discount-row') || document.createElement('div');
+                if (!document.querySelector('.discount-row')) {
+                    discountRow.className = 'summary-row discount-row';
+                    discountRow.style.color = 'var(--sale-red)';
+                    discountRow.innerHTML = '<span>Discount (WELCOME10)</span> <span id="discount">-R' + discount.toFixed(2) + '</span>';
+
+                    const summary = document.querySelector('.cart-summary');
+                    const taxRow = document.querySelectorAll('.summary-row')[2];
+                    summary.insertBefore(discountRow, taxRow.nextSibling);
+                } else {
+                    document.getElementById('discount').textContent = '-R' + discount.toFixed(2);
+                }
+            } else {
+                // Remove discount row if exists
+                const discountRow = document.querySelector('.discount-row');
+                if (discountRow) {
+                    discountRow.remove();
+                }
+            }
+
+            // Update display
+            document.getElementById('subtotal').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('tax').textContent = 'R' + tax.toFixed(2);
+            document.getElementById('total').textContent = 'R' + total.toFixed(2);
+
+            // Update cart stats
+            document.querySelector('.cart-stats span:first-child').innerHTML =
+                `<i class="fas fa-box"></i> ${itemsCount} ${itemsCount === 1 ? 'item' : 'items'}`;
+            document.querySelector('.cart-stats span:last-child').innerHTML =
+                `<i class="fas fa-rand-sign"></i> R${subtotal.toFixed(2)} total`;
+        }
+
+        // Update cart stats
+        function updateCartStats() {
+            const items = document.querySelectorAll('.cart-item');
+            calculateTotal();
+        }
+
+        // Checkout
+        function checkout() {
+            const items = document.querySelectorAll('.cart-item');
+            if (items.length === 0) {
+                alert('Your cart is empty! Please add items to your cart before checking out.');
+                return;
+            }
+
+            if (confirm('Proceed to checkout?')) {
+                // In the main application, this redirects to checkout page
+                alert('Redirecting to checkout...\n\nTotal: ' + document.getElementById('total').textContent);
+                // window.location.href = 'checkout.html';
+            }
+        }
+
+        // Move saved item to cart
+        function moveToCart() {
+            alert('Item moved to cart!');
+        }
+
+        // Remove saved item
+        function removeSaved() {
+            if (confirm('Remove this saved item?')) {
+                document.querySelector('.saved-item').remove();
+                document.querySelector('.saved-title').innerHTML =
+                    '<i class="fas fa-heart"></i> Saved for Later (0 items)';
+            }
+        }
+
+        // Initialize cart
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotal();
+        });
+    </script>
+</body>
+</html>

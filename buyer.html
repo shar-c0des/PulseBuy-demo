@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - PulseBuy Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0050b5;
+            --accent: #ffd166;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #e9ecef;
+            --gray-dark: #495057;
+            --pink: #ff6b6b;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --secondary-blue: #0050b5;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .demo-badge {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--gray-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary-blue);
+        }
+        
+        .cart-icon {
+            position: relative;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-yellow);
+            color: var(--dark-text);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+        
+        .stat-icon.orders { background: var(--primary-blue); }
+        .stat-icon.spent { background: var(--success); }
+        .stat-icon.products { background: var(--warning); }
+        .stat-icon.coupons { background: var(--danger); }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-info p {
+            color: var(--medium-text);
+            font-weight: 500;
+        }
+        
+        /* Dashboard Sections */
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--background);
+        }
+        
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-content {
+            padding: 1.5rem;
+        }
+        
+        /* Recent Orders */
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-info h4 {
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .order-info p {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+        
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .order-status.delivered { background: #e8f5e8; color: var(--success); }
+        .order-status.processing { background: #fff3e0; color: var(--warning); }
+        .order-status.shipped { background: #e3f2fd; color: var(--primary-blue); }
+        
+        .order-amount {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        /* Available Coupons */
+        .coupon-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .coupon-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .coupon-info h4 {
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .coupon-info p {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+        
+        .coupon-code {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-weight: 600;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .action-card h3 {
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-card p {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <span style="color: var(--primary-blue);">Pulse</span><span style="color: var(--accent-yellow);">Buy</span>
+                </a>
+                <div class="demo-badge">🧪 Demo Version</div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="buyer.html" style="color: var(--primary-blue);">Buyer Dashboard</a></li>
+                        <li><a href="seller.html">Seller Dashboard</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                        <li><a href="cart.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cart-count">0</span>
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-section">
+                    <h1>Welcome back, John Doe!</h1>
+                    <p>Here's your shopping activity and recent orders</p>
+                </div>
+            </div>
+
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon orders">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon spent">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$2,847</h3>
+                        <p>Total Spent</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon products">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>8</h3>
+                        <p>Unique Products</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon coupons">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>5</h3>
+                        <p>Available Coupons</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="quick-actions">
+                <a href="products.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Continue Shopping</h3>
+                    <p>Browse and add more items to your cart</p>
+                </a>
+                <a href="cart.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>View Cart</h3>
+                    <p>Review items in your shopping cart</p>
+                </a>
+                <a href="#" class="action-card" onclick="showOrderHistory()">
+                    <div class="action-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Order History</h3>
+                    <p>View all your past purchases</p>
+                </a>
+                <a href="#" class="action-card" onclick="showWishlist()">
+                    <div class="action-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Wishlist</h3>
+                    <p>Items you've saved for later</p>
+                </a>
+            </div>
+
+
+            <div class="dashboard-sections">
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-receipt"></i> Recent Orders</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Order #12345</h4>
+                                <p>Premium Wireless Headphones • 2 items • Dec 20, 2024</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="order-status delivered">Delivered</div>
+                                <div class="order-amount">$199.99</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Order #12344</h4>
+                                <p>Smart Fitness Tracker • 1 item • Dec 18, 2024</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="order-status shipped">Shipped</div>
+                                <div class="order-amount">$89.99</div>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <h4>Order #12343</h4>
+                                <p>Professional Camera Kit • 1 item • Dec 15, 2024</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="order-status processing">Processing</div>
+                                <div class="order-amount">$599.99</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-ticket-alt"></i> Available Coupons</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="coupon-item">
+                            <div class="coupon-info">
+                                <h4>Welcome Discount</h4>
+                                <p>10% off your next purchase</p>
+                            </div>
+                            <div class="coupon-code">WELCOME10</div>
+                        </div>
+                        <div class="coupon-item">
+                            <div class="coupon-info">
+                                <h4>Holiday Sale</h4>
+                                <p>$25 off orders over $100</p>
+                            </div>
+                            <div class="coupon-code">HOLIDAY25</div>
+                        </div>
+                        <div class="coupon-item">
+                            <div class="coupon-info">
+                                <h4>Free Shipping</h4>
+                                <p>Free shipping on any order</p>
+                            </div>
+                            <div class="coupon-code">FREESHIP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function loadCartCount() {
+            const cart = JSON.parse(localStorage.getItem('pulsebuy-cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+
+        function showOrderHistory() {
+            alert('Demo: Order History\n\nThis would show a detailed history of all your orders with:\n• Order details and tracking\n• Reorder functionality\n• Download invoices\n• Leave reviews');
+        }
+
+        function showWishlist() {
+            alert('Demo: Wishlist\n\nThis would show your saved items with:\n• Move to cart functionality\n• Price drop notifications\n• Stock availability alerts\n• Share wishlist options');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartCount();
+        });
+    </script>
+</body>
+</html>
